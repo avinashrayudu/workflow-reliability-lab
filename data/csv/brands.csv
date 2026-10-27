@@ -1,0 +1,11 @@
+brand_id,brand,currency,opening_cash,cash_buffer,loc_limit,loc_drawn,loc_apr,savings_apy,materiality
+fernwood-goods,Fernwood Goods,USD,300000.0,300000.0,1500000.0,400000.0,0.11,0.0258,2500.0
+lark-and-pine,Lark & Pine Candle Co,USD,239000.0,159000.0,256000.04,64000.01,0.11,0.0258,2500.0
+tidewater-swim,Tidewater Swim,USD,382000.0,255000.0,374624.25,0.0,0.11,0.0258,2500.0
+copperleaf-tea,Copperleaf Tea,USD,192000.0,128000.0,136879.9,0.0,0.11,0.0258,2500.0
+north-arc-outdoor,North Arc Outdoor,USD,482000.0,321000.0,555950.5,126000.0,0.11,0.0258,3095.95
+marigold-skin,Marigold Skin,USD,328000.0,218000.0,290630.83,0.0,0.11,0.0258,2500.0
+bramble-pet,Bramble Pet Supply,USD,283000.0,189000.0,304000.04,76000.01,0.11,0.0258,2500.0
+quillon-coffee,Quillon Coffee Roasters,USD,219000.0,146000.0,180302.35,0.0,0.11,0.0258,2500.0
+saltmarsh-apparel,Saltmarsh Apparel,CAD,317000.0,211000.0,343189.5,79999.99,0.11,0.0258,2500.0
+hollis-home,Hollis Home,USD,412000.0,275000.0,416599.46,0.0,0.11,0.0258,2949.02

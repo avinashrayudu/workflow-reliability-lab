@@ -1,0 +1,91 @@
+brand_id,bill_id,vendor,line,currency,amount,issue_week_start,due_week_start,discount_pct,discount_deadline_week_start,criticality
+fernwood-goods,PO-BFCM-BAL,Kestrel Knitworks Ltd,inventory,USD,520000.0,2026-11-02,2026-11-16,0.0,,critical
+fernwood-goods,PO-SPRING-DEP,Halden Textile Co,inventory,USD,200000.0,2026-12-21,2027-01-04,0.0,,critical
+fernwood-goods,FRT-BFCM,Harborline Freight,freight_duty,USD,95000.0,2026-11-02,2026-11-16,0.0,,high
+fernwood-goods,TPL-202611,ShipNest 3PL,fulfillment_3pl,USD,69511.06,2026-11-09,2026-12-07,0.02,2026-11-16,high
+fernwood-goods,TPL-202612,ShipNest 3PL,fulfillment_3pl,USD,141264.4,2026-12-07,2027-01-04,0.02,2026-12-14,high
+fernwood-goods,TPL-202701,ShipNest 3PL,fulfillment_3pl,USD,111217.69,2027-01-04,after window,0.02,2027-01-11,high
+fernwood-goods,PKG-202611,Noble Box Co,other_ap,USD,5560.88,2026-11-02,2026-11-30,0.01,2026-11-09,normal
+fernwood-goods,PKG-202612,Noble Box Co,other_ap,USD,11301.15,2026-11-30,2026-12-28,0.01,2026-12-07,normal
+fernwood-goods,PKG-202701,Noble Box Co,other_ap,USD,8897.42,2027-01-04,after window,0.01,2027-01-11,normal
+fernwood-goods,SAAS-ANNUAL,Gorgias,other_ap,USD,9000.0,2026-11-30,2026-12-28,0.0,,low
+lark-and-pine,PO-BFCM-BAL,Ashgrove Ceramics,inventory,USD,260300.0,before 2026-10-26,2026-11-02,0.0,,critical
+lark-and-pine,PO-SPRING-DEP,Ashgrove Ceramics,inventory,USD,93000.0,2026-12-21,2027-01-04,0.0,,critical
+lark-and-pine,FRT-BFCM,Bluewake Logistics,freight_duty,USD,32600.0,2026-10-26,2026-11-09,0.0,,high
+lark-and-pine,TPL-202611,Packriver Fulfillment,fulfillment_3pl,USD,24166.69,2026-11-09,2026-12-07,0.02,2026-11-16,high
+lark-and-pine,TPL-202612,Packriver Fulfillment,fulfillment_3pl,USD,49112.94,2026-12-07,2027-01-04,0.02,2026-12-14,high
+lark-and-pine,TPL-202701,Packriver Fulfillment,fulfillment_3pl,USD,38666.7,2027-01-04,after window,0.02,2027-01-11,high
+lark-and-pine,PKG-202611,Paper Mart,other_ap,USD,3682.39,2026-11-02,2026-11-30,0.01,2026-11-09,normal
+lark-and-pine,PKG-202612,Paper Mart,other_ap,USD,7483.56,2026-11-30,2026-12-28,0.01,2026-12-07,normal
+lark-and-pine,PKG-202701,Paper Mart,other_ap,USD,5891.82,2027-01-04,after window,0.01,2027-01-11,normal
+lark-and-pine,SAAS-ANNUAL,Klaviyo,other_ap,USD,9000.0,2026-11-30,2026-12-28,0.0,,low
+tidewater-swim,PO-BFCM-BAL,Coralline Textiles,inventory,USD,414800.0,before 2026-10-26,2026-11-02,0.0,,critical
+tidewater-swim,PO-SPRING-DEP,Coralline Textiles,inventory,USD,148100.0,2026-12-21,2027-01-04,0.0,,critical
+tidewater-swim,FRT-BFCM,Meridian Cargo,freight_duty,USD,52000.0,2026-10-26,2026-11-09,0.0,,high
+tidewater-swim,TPL-202611,Boxline Logistics,fulfillment_3pl,USD,37409.93,2026-11-09,2026-12-07,0.02,2026-11-16,high
+tidewater-swim,TPL-202612,Boxline Logistics,fulfillment_3pl,USD,76026.63,2026-12-07,2027-01-04,0.02,2026-12-14,high
+tidewater-swim,TPL-202701,Boxline Logistics,fulfillment_3pl,USD,59855.89,2027-01-04,after window,0.02,2027-01-11,high
+tidewater-swim,PKG-202611,Uline,other_ap,USD,5827.36,2026-11-02,2026-11-30,0.01,2026-11-09,normal
+tidewater-swim,PKG-202612,Uline,other_ap,USD,11842.71,2026-11-30,2026-12-28,0.01,2026-12-07,normal
+tidewater-swim,PKG-202701,Uline,other_ap,USD,9323.78,2027-01-04,after window,0.01,2027-01-11,normal
+tidewater-swim,SAAS-ANNUAL,Triple Whale,other_ap,USD,9000.0,2026-11-30,2026-12-28,0.0,,low
+copperleaf-tea,PO-BFCM-BAL,Uplands Leaf Co,inventory,USD,211500.0,before 2026-10-26,2026-11-02,0.0,,critical
+copperleaf-tea,PO-SPRING-DEP,Uplands Leaf Co,inventory,USD,75500.0,2026-12-21,2027-01-04,0.0,,critical
+copperleaf-tea,FRT-BFCM,Crestway Forwarding,freight_duty,USD,26500.0,2026-10-26,2026-11-09,0.0,,high
+copperleaf-tea,TPL-202611,Fulcrum Fulfillment,fulfillment_3pl,USD,19764.37,2026-11-09,2026-12-07,0.02,2026-11-16,high
+copperleaf-tea,TPL-202612,Fulcrum Fulfillment,fulfillment_3pl,USD,40166.29,2026-12-07,2027-01-04,0.02,2026-12-14,high
+copperleaf-tea,TPL-202701,Fulcrum Fulfillment,fulfillment_3pl,USD,31622.98,2027-01-04,after window,0.02,2027-01-11,high
+copperleaf-tea,PKG-202611,Vellum Paper Mills,other_ap,USD,2129.2,2026-11-02,2026-11-30,0.01,2026-11-09,normal
+copperleaf-tea,PKG-202612,Vellum Paper Mills,other_ap,USD,4327.08,2026-11-30,2026-12-28,0.01,2026-12-07,normal
+copperleaf-tea,PKG-202701,Vellum Paper Mills,other_ap,USD,3406.72,2027-01-04,after window,0.01,2027-01-11,normal
+copperleaf-tea,SAAS-ANNUAL,Klaviyo,other_ap,USD,9000.0,2026-11-30,2026-12-28,0.0,,low
+north-arc-outdoor,PO-BFCM-BAL,Ridgeback Manufacturing,inventory,USD,512400.0,before 2026-10-26,2026-11-02,0.0,,critical
+north-arc-outdoor,PO-SPRING-DEP,Ridgeback Manufacturing,inventory,USD,183000.0,2026-12-21,2027-01-04,0.0,,critical
+north-arc-outdoor,FRT-BFCM,Tidelink Freight,freight_duty,USD,64200.0,2026-10-26,2026-11-09,0.0,,high
+north-arc-outdoor,TPL-202611,Dockside 3PL,fulfillment_3pl,USD,45683.91,2026-11-09,2026-12-07,0.02,2026-11-16,high
+north-arc-outdoor,TPL-202612,Dockside 3PL,fulfillment_3pl,USD,92841.5,2026-12-07,2027-01-04,0.02,2026-12-14,high
+north-arc-outdoor,TPL-202701,Dockside 3PL,fulfillment_3pl,USD,73094.26,2027-01-04,after window,0.02,2027-01-11,high
+north-arc-outdoor,PKG-202611,Uline,other_ap,USD,8647.93,2026-11-02,2026-11-30,0.01,2026-11-09,normal
+north-arc-outdoor,PKG-202612,Uline,other_ap,USD,17574.83,2026-11-30,2026-12-28,0.01,2026-12-07,normal
+north-arc-outdoor,PKG-202701,Uline,other_ap,USD,13836.69,2027-01-04,after window,0.01,2027-01-11,normal
+north-arc-outdoor,SAAS-ANNUAL,Figma,other_ap,USD,9000.0,2026-11-30,2026-12-28,0.0,,low
+marigold-skin,PO-BFCM-BAL,Lumen Formulations,inventory,USD,357900.0,before 2026-10-26,2026-11-02,0.0,,critical
+marigold-skin,PO-SPRING-DEP,Lumen Formulations,inventory,USD,127800.0,2026-12-21,2027-01-04,0.0,,critical
+marigold-skin,FRT-BFCM,Northstar Shipping,freight_duty,USD,44800.0,2026-10-26,2026-11-09,0.0,,high
+marigold-skin,TPL-202611,Parcelworks,fulfillment_3pl,USD,33399.04,2026-11-09,2026-12-07,0.02,2026-11-16,high
+marigold-skin,TPL-202612,Parcelworks,fulfillment_3pl,USD,67875.47,2026-12-07,2027-01-04,0.02,2026-12-14,high
+marigold-skin,TPL-202701,Parcelworks,fulfillment_3pl,USD,53438.46,2027-01-04,after window,0.02,2027-01-11,high
+marigold-skin,PKG-202611,Altamira Packaging Co,other_ap,USD,4520.83,2026-11-02,2026-11-30,0.01,2026-11-09,normal
+marigold-skin,PKG-202612,Altamira Packaging Co,other_ap,USD,9187.49,2026-11-30,2026-12-28,0.01,2026-12-07,normal
+marigold-skin,PKG-202701,Altamira Packaging Co,other_ap,USD,7233.32,2027-01-04,after window,0.01,2027-01-11,normal
+marigold-skin,SAAS-ANNUAL,Recharge,other_ap,USD,9000.0,2026-11-30,2026-12-28,0.0,,low
+bramble-pet,PO-BFCM-BAL,Thistle Pet Products,inventory,USD,309100.0,before 2026-10-26,2026-11-02,0.0,,critical
+bramble-pet,PO-SPRING-DEP,Thistle Pet Products,inventory,USD,110400.0,2026-12-21,2027-01-04,0.0,,critical
+bramble-pet,FRT-BFCM,Pallas Logistics,freight_duty,USD,38700.0,2026-10-26,2026-11-09,0.0,,high
+bramble-pet,TPL-202611,Crateway Fulfillment,fulfillment_3pl,USD,28736.67,2026-11-09,2026-12-07,0.02,2026-11-16,high
+bramble-pet,TPL-202612,Crateway Fulfillment,fulfillment_3pl,USD,58400.32,2026-12-07,2027-01-04,0.02,2026-12-14,high
+bramble-pet,TPL-202701,Crateway Fulfillment,fulfillment_3pl,USD,45978.67,2027-01-04,after window,0.02,2027-01-11,high
+bramble-pet,PKG-202611,Uline,other_ap,USD,3731.14,2026-11-02,2026-11-30,0.01,2026-11-09,normal
+bramble-pet,PKG-202612,Uline,other_ap,USD,7582.63,2026-11-30,2026-12-28,0.01,2026-12-07,normal
+bramble-pet,PKG-202701,Uline,other_ap,USD,5969.82,2027-01-04,after window,0.01,2027-01-11,normal
+bramble-pet,SAAS-ANNUAL,Recharge,other_ap,USD,9000.0,2026-11-30,2026-12-28,0.0,,low
+quillon-coffee,PO-BFCM-BAL,Altura Green Coffee,inventory,USD,244000.0,before 2026-10-26,2026-11-02,0.0,,critical
+quillon-coffee,PO-SPRING-DEP,Altura Green Coffee,inventory,USD,87100.0,2026-12-21,2027-01-04,0.0,,critical
+quillon-coffee,FRT-BFCM,Saltbox Freight,freight_duty,USD,30600.0,2026-10-26,2026-11-09,0.0,,high
+quillon-coffee,TPL-202611,Bundle & Ship,fulfillment_3pl,USD,23358.27,2026-11-09,2026-12-07,0.02,2026-11-16,high
+quillon-coffee,TPL-202612,Bundle & Ship,fulfillment_3pl,USD,47470.03,2026-12-07,2027-01-04,0.02,2026-12-14,high
+quillon-coffee,TPL-202701,Bundle & Ship,fulfillment_3pl,USD,37373.23,2027-01-04,after window,0.02,2027-01-11,high
+quillon-coffee,PKG-202611,Tamsin Ceramics,other_ap,USD,2804.64,2026-11-02,2026-11-30,0.01,2026-11-09,normal
+quillon-coffee,PKG-202612,Tamsin Ceramics,other_ap,USD,5699.76,2026-11-30,2026-12-28,0.01,2026-12-07,normal
+quillon-coffee,PKG-202701,Tamsin Ceramics,other_ap,USD,4487.43,2027-01-04,after window,0.01,2027-01-11,normal
+quillon-coffee,SAAS-ANNUAL,Recharge,other_ap,USD,9000.0,2026-11-30,2026-12-28,0.0,,low
+hollis-home,PO-BFCM-BAL,Ostrava Home Goods,inventory,USD,447300.0,before 2026-10-26,2026-11-02,0.0,,critical
+hollis-home,PO-SPRING-DEP,Ostrava Home Goods,inventory,USD,159800.0,2026-12-21,2027-01-04,0.0,,critical
+hollis-home,FRT-BFCM,Orchard Line Freight,freight_duty,USD,56100.0,2026-10-26,2026-11-09,0.0,,high
+hollis-home,TPL-202611,Corbel Warehousing,fulfillment_3pl,USD,39325.09,2026-11-09,2026-12-07,0.02,2026-11-16,high
+hollis-home,TPL-202612,Corbel Warehousing,fulfillment_3pl,USD,79918.72,2026-12-07,2027-01-04,0.02,2026-12-14,high
+hollis-home,TPL-202701,Corbel Warehousing,fulfillment_3pl,USD,62920.14,2027-01-04,after window,0.02,2027-01-11,high
+hollis-home,PKG-202611,Pirate Ship,other_ap,USD,6480.3,2026-11-02,2026-11-30,0.01,2026-11-09,normal
+hollis-home,PKG-202612,Pirate Ship,other_ap,USD,13169.64,2026-11-30,2026-12-28,0.01,2026-12-07,normal
+hollis-home,PKG-202701,Pirate Ship,other_ap,USD,10368.47,2027-01-04,after window,0.01,2027-01-11,normal
+hollis-home,SAAS-ANNUAL,Notion,other_ap,USD,9000.0,2026-11-30,2026-12-28,0.0,,low

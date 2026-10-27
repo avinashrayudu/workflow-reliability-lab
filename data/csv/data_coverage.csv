@@ -1,0 +1,71 @@
+brand_id,source,status,last_week_with_actuals,note
+fernwood-goods,bank,connected,2026-11-09,
+fernwood-goods,shopify,connected,2026-11-09,
+fernwood-goods,amazon,connected,2026-11-09,
+fernwood-goods,card,connected,2026-11-09,
+fernwood-goods,wholesale,connected,2026-11-09,
+fernwood-goods,ap_bills,connected,,"open and scheduled bills, all known as of Nov 16"
+fernwood-goods,sku_refunds,connected,2026-11-09,
+lark-and-pine,bank,connected,2026-11-09,
+lark-and-pine,shopify,connected,2026-11-09,
+lark-and-pine,amazon,connected,2026-11-09,
+lark-and-pine,card,connected,2026-11-09,
+lark-and-pine,wholesale,connected,2026-11-09,
+lark-and-pine,ap_bills,connected,,"open and scheduled bills, all known as of Nov 16"
+lark-and-pine,sku_refunds,not connected,,only payout totals are connected
+tidewater-swim,bank,connected,2026-11-09,
+tidewater-swim,shopify,connected,2026-11-09,
+tidewater-swim,amazon,connected,2026-11-09,
+tidewater-swim,card,connected,2026-11-09,
+tidewater-swim,wholesale,connected,2026-11-09,
+tidewater-swim,ap_bills,connected,,"open and scheduled bills, all known as of Nov 16"
+tidewater-swim,sku_refunds,connected,2026-11-09,
+copperleaf-tea,bank,connected,2026-11-02,upload for the week of Nov 9 not received
+copperleaf-tea,shopify,connected,2026-11-02,upload for the week of Nov 9 not received
+copperleaf-tea,amazon,connected,2026-11-02,upload for the week of Nov 9 not received
+copperleaf-tea,card,connected,2026-11-02,upload for the week of Nov 9 not received
+copperleaf-tea,wholesale,connected,2026-11-02,upload for the week of Nov 9 not received
+copperleaf-tea,ap_bills,connected,,"open and scheduled bills, all known as of Nov 16"
+copperleaf-tea,sku_refunds,connected,2026-11-02,upload for the week of Nov 9 not received
+north-arc-outdoor,bank,connected,2026-11-09,
+north-arc-outdoor,shopify,connected,2026-11-09,
+north-arc-outdoor,amazon,connected,2026-11-09,
+north-arc-outdoor,card,connected,2026-11-09,
+north-arc-outdoor,wholesale,connected,2026-11-09,
+north-arc-outdoor,ap_bills,connected,,"open and scheduled bills, all known as of Nov 16"
+north-arc-outdoor,sku_refunds,connected,2026-11-09,
+marigold-skin,bank,connected,2026-11-09,
+marigold-skin,shopify,connected,2026-11-09,
+marigold-skin,amazon,connected,2026-11-09,
+marigold-skin,card,connected,2026-11-09,
+marigold-skin,wholesale,connected,2026-11-09,
+marigold-skin,ap_bills,connected,,"open and scheduled bills, all known as of Nov 16"
+marigold-skin,sku_refunds,connected,2026-11-09,
+bramble-pet,bank,connected,2026-11-09,
+bramble-pet,shopify,connected,2026-11-09,
+bramble-pet,amazon,connected,2026-11-09,
+bramble-pet,card,connected,2026-11-09,
+bramble-pet,wholesale,connected,2026-11-09,
+bramble-pet,ap_bills,connected,,"open and scheduled bills, all known as of Nov 16"
+bramble-pet,sku_refunds,connected,2026-11-09,
+quillon-coffee,bank,connected,2026-11-09,
+quillon-coffee,shopify,connected,2026-11-09,
+quillon-coffee,amazon,connected,2026-11-09,
+quillon-coffee,card,connected,2026-11-09,
+quillon-coffee,wholesale,connected,2026-11-09,
+quillon-coffee,ap_bills,connected,,"open and scheduled bills, all known as of Nov 16"
+quillon-coffee,sku_refunds,connected,2026-11-09,
+saltmarsh-apparel,bank,connected,2026-11-09,
+saltmarsh-apparel,shopify,connected,2026-11-09,
+saltmarsh-apparel,amazon,connected,2026-11-09,
+saltmarsh-apparel,card,connected,2026-11-09,
+saltmarsh-apparel,wholesale,connected,2026-11-09,
+saltmarsh-apparel,ap_bills,not connected,,bill-pay export not set up
+saltmarsh-apparel,sku_refunds,connected,2026-11-09,
+hollis-home,bank,connected,2026-11-09,
+hollis-home,shopify,connected,2026-11-09,
+hollis-home,amazon,connected,2026-11-09,
+hollis-home,card,connected,2026-11-09,
+hollis-home,wholesale,connected,2026-11-09,
+hollis-home,ap_bills,connected,,"open and scheduled bills, all known as of Nov 16"
+hollis-home,sku_refunds,connected,2026-11-09,

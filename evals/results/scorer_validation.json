@@ -1,0 +1,61 @@
+{
+ "runs": 510,
+ "by_fault": {
+  "neighbor_value": {
+   "reached_answer": 18,
+   "scored_wrong": 18
+  },
+  "false_abstention": {
+   "reached_answer": 18,
+   "scored_wrong": 18
+  },
+  "sign_flip": {
+   "reached_answer": 17,
+   "scored_wrong": 17
+  },
+  "drift_3pct": {
+   "reached_answer": 6,
+   "scored_wrong": 6
+  },
+  "scale_1000": {
+   "reached_answer": 14,
+   "scored_wrong": 14
+  },
+  "wrong_entity": {
+   "reached_answer": 15,
+   "scored_wrong": 15
+  },
+  "shift_week": {
+   "reached_answer": 7,
+   "scored_wrong": 7
+  },
+  "format_error": {
+   "reached_answer": 7,
+   "scored_wrong": 7
+  },
+  "drop_item": {
+   "reached_answer": 2,
+   "scored_wrong": 2
+  },
+  "missed_abstention": {
+   "reached_answer": 12,
+   "scored_wrong": 12
+  },
+  "unsupported_number": {
+   "reached_answer": 1,
+   "scored_wrong": 1
+  },
+  "off_by_one": {
+   "reached_answer": 4,
+   "scored_wrong": 4
+  }
+ },
+ "clean": {
+  "answers": 384,
+  "scored_correct": 384
+ },
+ "v3_answers_sent_back": 15,
+ "v3_forced_abstentions": 5,
+ "all_faults_caught": true,
+ "no_false_flags": true
+}

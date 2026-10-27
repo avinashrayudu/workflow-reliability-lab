@@ -1,0 +1,159 @@
+# The graded question set. Expected answers are computed by truth/build_truth.py from data/csv,
+# never typed by hand. type: money | date | text | int | set | abstain
+# Built by Avinash Rayudu.
+
+questions:
+- id: Q01
+  brand: fernwood-goods
+  type: money
+  q: "In the week-0 forecast, what is Fernwood Goods' lowest closing cash balance across the 13 weeks?"
+- id: Q02
+  brand: fernwood-goods
+  type: date
+  q: "In the week-0 forecast, which week (week_start) has Fernwood Goods' lowest closing cash?"
+- id: Q03
+  brand: fernwood-goods
+  type: money
+  q: "In the week-0 forecast, what is Fernwood Goods' gap to its cash buffer at the low point?"
+- id: Q04
+  brand: fernwood-goods
+  type: money
+  q: "What credit draw (in multiples of $25,000) keeps Fernwood Goods' week-0 forecast low point at or above its buffer?"
+- id: Q05
+  brand: fernwood-goods
+  type: money
+  q: "What was Fernwood Goods' actual closing cash at the end of the week of 2026-11-09?"
+- id: Q06
+  brand: fernwood-goods
+  type: money
+  q: "What is Fernwood Goods' Shopify payout variance (dtc_payouts, actual minus forecast) summed over weeks 0 to 2?"
+- id: Q07
+  brand: fernwood-goods
+  type: text
+  q: "Which SKU has the largest refund overrun (actual minus forecast refunds, summed over weeks 0 to 2) at Fernwood Goods?"
+- id: Q08
+  brand: fernwood-goods
+  type: money
+  q: "How much more was refunded on SKU FW-2201 than forecast over weeks 0 to 2 at Fernwood Goods (actual minus forecast)?"
+- id: Q09
+  brand: fernwood-goods
+  type: text
+  q: "Which is Fernwood Goods' largest single bill due in the week of 2026-11-16? Give the bill_id."
+- id: Q10
+  brand: fernwood-goods
+  type: money
+  q: "In the week-0 forecast, what is Fernwood Goods' total cash out in the week of 2026-11-16, as a positive number (sum of the negative cash lines)?"
+- id: Q11
+  brand: fernwood-goods
+  type: money
+  q: "What card autopay does Fernwood Goods' forecast show in the week of 2026-11-16, as a positive number?"
+- id: Q12
+  brand: fernwood-goods
+  type: money
+  q: "What early-pay discount, in dollars, does Fernwood Goods earn by paying bill TPL-202611 by its discount deadline?"
+- id: Q13
+  brand: fernwood-goods
+  type: date
+  q: "What is the discount deadline week (week_start) for Fernwood Goods' bill TPL-202611?"
+- id: Q14
+  brand: fernwood-goods
+  type: money
+  q: "What is the interest on a $125,000 draw on Fernwood Goods' credit line held for one week?"
+- id: Q15
+  brand: fernwood-goods
+  type: money
+  q: "Per year, how much more does Fernwood Goods save by paying down its entire drawn credit line balance than by sweeping the same amount into savings (loc_drawn x (loc_apr - savings_apy))?"
+- id: Q16
+  brand: fernwood-goods
+  type: money
+  q: "On the roll-forward basis, what is Fernwood Goods' low point from the week of 2026-11-16 onward?"
+- id: Q17
+  brand: fernwood-goods
+  type: money
+  q: "What is Fernwood Goods' total variance across all cash lines (actual minus forecast) for weeks 0 to 2?"
+- id: Q18
+  brand: hollis-home
+  type: money
+  q: "By how much did Hollis Home's freight_duty payments differ from forecast in the week of 2026-11-09 (actual minus forecast)?"
+- id: Q19
+  brand: portfolio
+  type: int
+  q: "How many of the 10 brands have a week-0 forecast low point below their cash buffer?"
+- id: Q20
+  brand: portfolio
+  type: text
+  q: "Which brand has the lowest ratio of week-0 forecast low point to cash buffer? Give the brand_id."
+- id: Q21
+  brand: portfolio
+  type: set
+  q: "Which brands have no wholesale_receipts at all in the 13-week forecast? Give the list of brand_ids."
+- id: Q22
+  brand: north-arc-outdoor
+  type: money
+  q: "How much more did North Arc Outdoor spend on Meta ads than forecast over weeks 0 to 2 (actual minus forecast ad_spend)?"
+- id: Q23
+  brand: tidewater-swim
+  type: money
+  q: "What Amazon settlement (marketplace_payouts) did Tidewater Swim actually receive in the week of 2026-11-09?"
+- id: Q24
+  brand: quillon-coffee
+  type: money
+  q: "What are Quillon Coffee Roasters' total wholesale_receipts across all 13 weeks of the week-0 forecast?"
+- id: Q25
+  brand: bramble-pet
+  type: int
+  q: "How many weeks of the 13-week forecast include a payroll payment for Bramble Pet Supply?"
+- id: Q26
+  brand: marigold-skin
+  type: money
+  q: "What sales tax payment does Marigold Skin's forecast show in the week of 2026-11-16, as a positive number?"
+- id: Q27
+  brand: fernwood-goods
+  type: money
+  q: "In the week-0 forecast, what is Fernwood Goods' closing cash in the final week (week of 2027-01-18)?"
+- id: Q28
+  brand: copperleaf-tea
+  type: abstain
+  q: "What Shopify payouts (dtc_payouts) did Copperleaf Tea actually receive in the week of 2026-11-09?"
+- id: Q29
+  brand: copperleaf-tea
+  type: abstain
+  q: "What is Copperleaf Tea's total variance across all cash lines (actual minus forecast) for weeks 0 to 2?"
+- id: Q30
+  brand: saltmarsh-apparel
+  type: abstain
+  q: "When is Saltmarsh Apparel's spring deposit bill PO-SPRING-DEP due (due week_start)?"
+- id: Q31
+  brand: lark-and-pine
+  type: abstain
+  q: "Which SKU has the largest refund overrun (actual minus forecast, weeks 0 to 2) at Lark & Pine Candle Co?"
+- id: Q32
+  brand: lark-and-pine
+  type: money
+  q: "What is Lark & Pine Candle Co's Shopify payout variance (dtc_payouts, actual minus forecast) summed over weeks 0 to 2?"
+- id: Q33
+  brand: saltmarsh-apparel
+  type: money
+  q: "In the week-0 forecast, what is Saltmarsh Apparel's lowest closing cash balance across the 13 weeks?"
+
+# The workflow itself: the Monday brief, scored field by field, plus every dollar figure in its text.
+brief:
+  id: B01
+  brand: fernwood-goods
+  q: >-
+    Write Fernwood Goods' Cash Brief for Monday 2026-11-16. Return one JSON object with these keys:
+    low_point (roll-forward low point from the week of 2026-11-16 onward), low_point_week (its week_start),
+    gap_to_buffer, draw (credit draw in multiples of $25,000 to hold the buffer), interest_one_week (interest on
+    that draw for one week), top_refund_sku (largest refund overrun over weeks 0 to 2), payout_variance
+    (dtc_payouts actual minus forecast, weeks 0 to 2), largest_bill_this_week (bill_id of the largest bill due the
+    week of 2026-11-16), and narrative (four to six sentences for the founder, citing dollar figures). Put the
+    JSON on its own line at the end. If something can't be computed from the data, set it to null.
+  fields:
+    low_point: money
+    low_point_week: date
+    gap_to_buffer: money
+    draw: money
+    interest_one_week: money
+    top_refund_sku: text
+    payout_variance: money
+    largest_bill_this_week: text

@@ -1,0 +1,208 @@
+{
+ "mode": "faulty",
+ "model": "mock-faulty",
+ "runs_per_question": 3,
+ "generated_at": "2026-10-27T09:39:58+00:00",
+ "tokens_are_estimates": true,
+ "priced_as": "claude-sonnet-5-5",
+ "variants": {
+  "v1": {
+   "runs_per_question": 3,
+   "questions": 33,
+   "accuracy": 0.768,
+   "questions_right_every_run": 14,
+   "questions_right_by_majority": 29,
+   "consistency_all_runs_agree": 0.424,
+   "consistency_modal_share": 0.778,
+   "money_answers_scored": 60,
+   "median_numeric_error_pct": 0.0,
+   "mean_numeric_error_pct": 13.493,
+   "abstention_correct": "10/12",
+   "false_abstentions": 3,
+   "outcomes": {
+    "wrong_number": 10,
+    "correct": 76,
+    "wrong_entity": 3,
+    "false_abstention": 3,
+    "wrong_date": 1,
+    "format_error": 3,
+    "wrong_set": 1,
+    "missed_abstention": 2
+   },
+   "brief_fields_correct": "24/24",
+   "brief_dollar_figures": 15,
+   "brief_unsupported_figures": 0,
+   "validator_revisions": 0,
+   "validator_forced_abstentions": 0,
+   "input_tokens": 3816792,
+   "output_tokens": 4086,
+   "cost_usd": 7.6744,
+   "cost_per_question_usd": 0.07524,
+   "mean_turns": 1,
+   "median_latency_s": 0.025
+  },
+  "v2": {
+   "runs_per_question": 3,
+   "questions": 33,
+   "accuracy": 0.707,
+   "questions_right_every_run": 13,
+   "questions_right_by_majority": 26,
+   "consistency_all_runs_agree": 0.394,
+   "consistency_modal_share": 0.758,
+   "money_answers_scored": 58,
+   "median_numeric_error_pct": 0.0,
+   "mean_numeric_error_pct": 29.438,
+   "abstention_correct": "7/12",
+   "false_abstentions": 4,
+   "outcomes": {
+    "correct": 70,
+    "wrong_number": 13,
+    "false_abstention": 4,
+    "wrong_entity": 3,
+    "wrong_date": 1,
+    "wrong_set": 1,
+    "format_error": 3,
+    "missed_abstention": 4
+   },
+   "brief_fields_correct": "24/24",
+   "brief_dollar_figures": 15,
+   "brief_unsupported_figures": 0,
+   "validator_revisions": 0,
+   "validator_forced_abstentions": 0,
+   "input_tokens": 212250,
+   "output_tokens": 13761,
+   "cost_usd": 0.5621,
+   "cost_per_question_usd": 0.00551,
+   "mean_turns": 2,
+   "median_latency_s": 0.0
+  },
+  "v3": {
+   "runs_per_question": 3,
+   "questions": 33,
+   "accuracy": 0.808,
+   "questions_right_every_run": 18,
+   "questions_right_by_majority": 30,
+   "consistency_all_runs_agree": 0.545,
+   "consistency_modal_share": 0.838,
+   "money_answers_scored": 61,
+   "median_numeric_error_pct": 0.0,
+   "mean_numeric_error_pct": 16.546,
+   "abstention_correct": "12/12",
+   "false_abstentions": 4,
+   "outcomes": {
+    "correct": 80,
+    "wrong_date": 3,
+    "false_abstention": 4,
+    "wrong_number": 7,
+    "wrong_entity": 4,
+    "wrong_count": 1
+   },
+   "brief_fields_correct": "24/24",
+   "brief_dollar_figures": 15,
+   "brief_unsupported_figures": 0,
+   "validator_revisions": 8,
+   "validator_forced_abstentions": 2,
+   "input_tokens": 713430,
+   "output_tokens": 11493,
+   "cost_usd": 1.5418,
+   "cost_per_question_usd": 0.01512,
+   "mean_turns": 3.31,
+   "median_latency_s": 0.001
+  }
+ },
+ "failures_by_brand": {
+  "fernwood-goods": {
+   "v1": {
+    "wrong_number": 8,
+    "wrong_entity": 2,
+    "false_abstention": 1,
+    "wrong_date": 1,
+    "format_error": 2
+   },
+   "v2": {
+    "wrong_number": 5,
+    "false_abstention": 3,
+    "wrong_entity": 3,
+    "wrong_date": 1
+   },
+   "v3": {
+    "wrong_date": 3,
+    "false_abstention": 3,
+    "wrong_number": 7,
+    "wrong_entity": 3
+   }
+  },
+  "portfolio": {
+   "v1": {
+    "false_abstention": 2,
+    "wrong_entity": 1,
+    "wrong_set": 1
+   },
+   "v2": {
+    "wrong_set": 1
+   },
+   "v3": {
+    "false_abstention": 1,
+    "wrong_entity": 1
+   }
+  },
+  "north-arc-outdoor": {
+   "v1": {
+    "wrong_number": 2
+   },
+   "v2": {
+    "wrong_number": 3
+   }
+  },
+  "quillon-coffee": {
+   "v1": {
+    "format_error": 1
+   },
+   "v2": {
+    "format_error": 1,
+    "false_abstention": 1
+   }
+  },
+  "copperleaf-tea": {
+   "v1": {
+    "missed_abstention": 1
+   },
+   "v2": {
+    "missed_abstention": 2,
+    "format_error": 1
+   }
+  },
+  "saltmarsh-apparel": {
+   "v1": {
+    "missed_abstention": 1
+   },
+   "v2": {
+    "missed_abstention": 2,
+    "wrong_number": 1
+   }
+  },
+  "hollis-home": {
+   "v2": {
+    "wrong_number": 2
+   }
+  },
+  "tidewater-swim": {
+   "v2": {
+    "wrong_number": 1
+   }
+  },
+  "bramble-pet": {
+   "v2": {
+    "format_error": 1
+   },
+   "v3": {
+    "wrong_count": 1
+   }
+  },
+  "lark-and-pine": {
+   "v2": {
+    "wrong_number": 1
+   }
+  }
+ }
+}

@@ -1,0 +1,217 @@
+# Reference solutions, one per question, written in two forms:
+#   sql   a single SQLite query over the tables (used by the mock for v1 and v2)
+#   v3    the skill to load and the tool calls to make, and which result key holds the answer
+# They are a second, independent computation of every answer: tests/test_truth.py requires
+# them to agree with truth/build_truth.py (pandas). The offline mock replays them.
+# shape: scalar (first cell; NULL or no row means abstain) | list (first column of every row)
+# Built by Avinash Rayudu.
+
+Q01:
+  sql: >-
+    with f as (select week_index, sum(forecast) flow from weekly_cash where brand_id='fernwood-goods' and is_cash=1
+    group by week_index), c as (select week_index, (select opening_cash from brands where brand_id='fernwood-goods')
+    + sum(flow) over (order by week_index) closing from f) select round(min(closing), 2) from c
+  v3: {skill: cash-position, calls: [[cash_path, {brand_id: fernwood-goods, basis: forecast}]], pick: low_point}
+Q02:
+  sql: >-
+    with f as (select week_index, sum(forecast) flow from weekly_cash where brand_id='fernwood-goods' and is_cash=1
+    group by week_index), c as (select week_index, (select opening_cash from brands where brand_id='fernwood-goods')
+    + sum(flow) over (order by week_index) closing from f)
+    select w.week_start from c join weeks w using (week_index) order by closing limit 1
+  v3: {skill: cash-position, calls: [[cash_path, {brand_id: fernwood-goods, basis: forecast}]], pick: low_point_week}
+Q03:
+  sql: >-
+    with f as (select week_index, sum(forecast) flow from weekly_cash where brand_id='fernwood-goods' and is_cash=1
+    group by week_index), c as (select week_index, (select opening_cash from brands where brand_id='fernwood-goods')
+    + sum(flow) over (order by week_index) closing from f)
+    select round(max(0, (select cash_buffer from brands where brand_id='fernwood-goods') - min(closing)), 2) from c
+  v3: {skill: cash-position, calls: [[cash_path, {brand_id: fernwood-goods, basis: forecast}]], pick: gap_to_buffer}
+Q04:
+  sql: >-
+    with f as (select week_index, sum(forecast) flow from weekly_cash where brand_id='fernwood-goods' and is_cash=1
+    group by week_index), c as (select week_index, (select opening_cash from brands where brand_id='fernwood-goods')
+    + sum(flow) over (order by week_index) closing from f),
+    g as (select max(0, (select cash_buffer from brands where brand_id='fernwood-goods') - min(closing)) gap from c)
+    select case when gap = 0 then 0 else (cast(gap / 25000 as int) + (gap > cast(gap / 25000 as int) * 25000)) * 25000 end from g
+  v3: {skill: credit-line, calls: [[cash_path, {brand_id: fernwood-goods, basis: forecast}]], pick: draw_to_hold_buffer}
+Q05:
+  sql: >-
+    select round((select opening_cash from brands where brand_id='fernwood-goods') + sum(actual), 2) from weekly_cash
+    where brand_id='fernwood-goods' and is_cash=1 and week_index <= 2
+  v3: {skill: cash-position, calls: [[cash_path, {brand_id: fernwood-goods, basis: rollforward}]], pick: "weeks.2.closing_cash"}
+Q06:
+  sql: >-
+    select case when count(actual) = count(*) then round(sum(actual - forecast), 2) end from weekly_cash
+    where brand_id='fernwood-goods' and line='dtc_payouts' and week_index <= 2
+  v3: {skill: variance-drivers, calls: [[variance, {brand_id: fernwood-goods, line: dtc_payouts}]], pick: variance_actual_minus_forecast}
+Q07:
+  sql: >-
+    select sku from refunds_by_sku where brand_id='fernwood-goods' and week_index <= 2 group by sku
+    order by sum(actual - forecast) desc limit 1
+  v3: {skill: variance-drivers, calls: [[driver_variance, {brand_id: fernwood-goods, kind: refunds_by_sku}]], pick: largest_overrun}
+Q08:
+  sql: >-
+    select round(sum(actual - forecast), 2) from refunds_by_sku where brand_id='fernwood-goods' and sku='FW-2201'
+    and week_index <= 2
+  v3: {skill: variance-drivers, calls: [[driver_variance, {brand_id: fernwood-goods, kind: refunds_by_sku}]], pick: "items.sku=FW-2201.variance_actual_minus_forecast"}
+Q09:
+  sql: >-
+    select bill_id from bills where brand_id='fernwood-goods' and due_week_start='2026-11-16' order by amount desc limit 1
+  v3: {skill: bills-and-discounts, calls: [[bills, {brand_id: fernwood-goods, due_week_start: "2026-11-16"}]], pick: largest}
+Q10:
+  sql: >-
+    select round(-sum(forecast), 2) from weekly_cash where brand_id='fernwood-goods' and is_cash=1 and week_index=3
+    and forecast < 0
+  v3: {skill: cash-position, calls: [[week_lines, {brand_id: fernwood-goods, week_start: "2026-11-16", basis: forecast}]], pick: cash_out_positive}
+Q11:
+  sql: >-
+    select round(-forecast, 2) from weekly_cash where brand_id='fernwood-goods' and line='card_autopay' and week_index=3
+  v3: {skill: cash-position, calls: [[week_lines, {brand_id: fernwood-goods, week_start: "2026-11-16", basis: forecast}]], pick: "lines.card_autopay", negate: true}
+Q12:
+  sql: >-
+    select round(amount * discount_pct, 2) from bills where brand_id='fernwood-goods' and bill_id='TPL-202611'
+  v3: {skill: bills-and-discounts, calls: [[bills, {brand_id: fernwood-goods, bill_id: TPL-202611}]], pick: "bills.0.discount_amount"}
+Q13:
+  sql: >-
+    select discount_deadline_week_start from bills where brand_id='fernwood-goods' and bill_id='TPL-202611'
+  v3: {skill: bills-and-discounts, calls: [[bills, {brand_id: fernwood-goods, bill_id: TPL-202611}]], pick: "bills.0.discount_deadline_week_start"}
+Q14:
+  sql: select round(125000 * loc_apr / 52, 2) from brands where brand_id='fernwood-goods'
+  v3: {skill: credit-line, calls: [[credit_math, {brand_id: fernwood-goods, op: interest, amount: 125000, weeks: 1}]], pick: interest}
+Q15:
+  sql: select round(loc_drawn * (loc_apr - savings_apy), 2) from brands where brand_id='fernwood-goods'
+  v3: {skill: credit-line, calls: [[credit_math, {brand_id: fernwood-goods, op: paydown_vs_sweep}]], pick: annual_benefit_of_paydown}
+Q16:
+  sql: >-
+    with f as (select week_index, sum(case when week_index <= 2 then actual else forecast end) flow from weekly_cash
+    where brand_id='fernwood-goods' and is_cash=1 group by week_index), c as (select week_index,
+    (select opening_cash from brands where brand_id='fernwood-goods') + sum(flow) over (order by week_index) closing
+    from f) select round(min(closing), 2) from c where week_index >= 3
+  v3: {skill: cash-position, calls: [[cash_path, {brand_id: fernwood-goods, basis: rollforward}]], pick: low_point}
+Q17:
+  sql: >-
+    select case when count(actual) = count(*) then round(sum(actual - forecast), 2) end from weekly_cash
+    where brand_id='fernwood-goods' and is_cash=1 and week_index <= 2
+  v3: {skill: variance-drivers, calls: [[variance, {brand_id: fernwood-goods, line: all}]], pick: variance_actual_minus_forecast}
+Q18:
+  sql: >-
+    select round(actual - forecast, 2) from weekly_cash where brand_id='hollis-home' and line='freight_duty' and week_index=2
+  v3: {skill: variance-drivers, calls: [[variance, {brand_id: hollis-home, line: freight_duty, from_week_start: "2026-11-09", to_week_start: "2026-11-09"}]], pick: variance_actual_minus_forecast}
+Q19:
+  sql: >-
+    with f as (select brand_id, week_index, sum(forecast) flow from weekly_cash where is_cash=1 group by brand_id, week_index),
+    c as (select f.brand_id, b.opening_cash + sum(flow) over (partition by f.brand_id order by week_index) closing,
+    b.cash_buffer from f join brands b using (brand_id)),
+    l as (select brand_id, min(closing) low, max(cash_buffer) buf from c group by brand_id)
+    select count(*) from l where low < buf
+  v3: {skill: portfolio, calls: [[portfolio, {metric: low_point_vs_buffer}]], pick: count_below_buffer}
+Q20:
+  sql: >-
+    with f as (select brand_id, week_index, sum(forecast) flow from weekly_cash where is_cash=1 group by brand_id, week_index),
+    c as (select f.brand_id, b.opening_cash + sum(flow) over (partition by f.brand_id order by week_index) closing,
+    b.cash_buffer from f join brands b using (brand_id)),
+    l as (select brand_id, min(closing) / max(cash_buffer) ratio from c group by brand_id)
+    select brand_id from l order by ratio limit 1
+  v3: {skill: portfolio, calls: [[portfolio, {metric: low_point_vs_buffer}]], pick: lowest_ratio_brand}
+Q21:
+  shape: list
+  sql: >-
+    select brand_id from weekly_cash where line='wholesale_receipts' group by brand_id having sum(abs(forecast)) = 0
+    order by brand_id
+  v3: {skill: portfolio, calls: [[portfolio, {metric: brands_without_line, line: wholesale_receipts}]], pick: brands}
+Q22:
+  sql: >-
+    select round(sum(actual - forecast), 2) from ad_spend where brand_id='north-arc-outdoor' and platform='meta'
+    and week_index <= 2
+  v3: {skill: variance-drivers, calls: [[driver_variance, {brand_id: north-arc-outdoor, kind: ad_spend}]], pick: "items.platform=meta.variance_actual_minus_forecast"}
+Q23:
+  sql: >-
+    select round(actual, 2) from weekly_cash where brand_id='tidewater-swim' and line='marketplace_payouts' and week_index=2
+  v3: {skill: variance-drivers, calls: [[week_lines, {brand_id: tidewater-swim, week_start: "2026-11-09", basis: actual}]], pick: "lines.marketplace_payouts"}
+Q24:
+  sql: >-
+    select round(sum(forecast), 2) from weekly_cash where brand_id='quillon-coffee' and line='wholesale_receipts'
+  v3: {skill: cash-position, calls: [[line_series, {brand_id: quillon-coffee, line: wholesale_receipts}]], pick: total}
+Q25:
+  sql: >-
+    select count(*) from weekly_cash where brand_id='bramble-pet' and line='payroll' and forecast <> 0
+  v3: {skill: cash-position, calls: [[line_series, {brand_id: bramble-pet, line: payroll}]], pick: weeks_with_payment}
+Q26:
+  sql: >-
+    select round(-forecast, 2) from weekly_cash where brand_id='marigold-skin' and line='sales_tax' and week_index=3
+  v3: {skill: cash-position, calls: [[week_lines, {brand_id: marigold-skin, week_start: "2026-11-16", basis: forecast}]], pick: "lines.sales_tax", negate: true}
+Q27:
+  sql: >-
+    select round((select opening_cash from brands where brand_id='fernwood-goods') + sum(forecast), 2) from weekly_cash
+    where brand_id='fernwood-goods' and is_cash=1
+  v3: {skill: cash-position, calls: [[cash_path, {brand_id: fernwood-goods, basis: forecast}]], pick: ending_cash}
+Q28:
+  sql: >-
+    select actual from weekly_cash where brand_id='copperleaf-tea' and line='dtc_payouts' and week_index=2
+  v3: {skill: data-gaps, calls: [[check_coverage, {brand_id: copperleaf-tea}], [week_lines, {brand_id: copperleaf-tea, week_start: "2026-11-09", basis: actual}]], pick: "lines.dtc_payouts"}
+Q29:
+  sql: >-
+    select case when count(actual) = count(*) then round(sum(actual - forecast), 2) end from weekly_cash
+    where brand_id='copperleaf-tea' and is_cash=1 and week_index <= 2
+  v3: {skill: variance-drivers, calls: [[variance, {brand_id: copperleaf-tea, line: all}]], pick: variance_actual_minus_forecast}
+Q30:
+  sql: >-
+    select due_week_start from bills where brand_id='saltmarsh-apparel' and bill_id='PO-SPRING-DEP'
+  v3: {skill: bills-and-discounts, calls: [[bills, {brand_id: saltmarsh-apparel, bill_id: PO-SPRING-DEP}]], pick: "bills.0.due_week_start"}
+Q31:
+  sql: >-
+    select sku from refunds_by_sku where brand_id='lark-and-pine' and week_index <= 2 group by sku
+    order by sum(actual - forecast) desc limit 1
+  v3: {skill: variance-drivers, calls: [[driver_variance, {brand_id: lark-and-pine, kind: refunds_by_sku}]], pick: largest_overrun}
+Q32:
+  sql: >-
+    select case when count(actual) = count(*) then round(sum(actual - forecast), 2) end from weekly_cash
+    where brand_id='lark-and-pine' and line='dtc_payouts' and week_index <= 2
+  v3: {skill: variance-drivers, calls: [[variance, {brand_id: lark-and-pine, line: dtc_payouts}]], pick: variance_actual_minus_forecast}
+Q33:
+  sql: >-
+    with f as (select week_index, sum(forecast) flow from weekly_cash where brand_id='saltmarsh-apparel' and is_cash=1
+    group by week_index), c as (select week_index, (select opening_cash from brands where brand_id='saltmarsh-apparel')
+    + sum(flow) over (order by week_index) closing from f) select round(min(closing), 2) from c
+  v3: {skill: cash-position, calls: [[cash_path, {brand_id: saltmarsh-apparel, basis: forecast}]], pick: low_point}
+
+B01:
+  fields:
+    low_point: Q16
+    low_point_week:
+      sql: >-
+        with f as (select week_index, sum(case when week_index <= 2 then actual else forecast end) flow from weekly_cash
+        where brand_id='fernwood-goods' and is_cash=1 group by week_index), c as (select week_index,
+        (select opening_cash from brands where brand_id='fernwood-goods') + sum(flow) over (order by week_index) closing
+        from f) select w.week_start from c join weeks w using (week_index) where week_index >= 3 order by closing limit 1
+      v3: {calls: [[cash_path, {brand_id: fernwood-goods, basis: rollforward}]], pick: low_point_week}
+    gap_to_buffer:
+      sql: >-
+        with f as (select week_index, sum(case when week_index <= 2 then actual else forecast end) flow from weekly_cash
+        where brand_id='fernwood-goods' and is_cash=1 group by week_index), c as (select week_index,
+        (select opening_cash from brands where brand_id='fernwood-goods') + sum(flow) over (order by week_index) closing
+        from f) select round(max(0, (select cash_buffer from brands where brand_id='fernwood-goods') - min(closing)), 2)
+        from c where week_index >= 3
+      v3: {calls: [[cash_path, {brand_id: fernwood-goods, basis: rollforward}]], pick: gap_to_buffer}
+    draw:
+      sql: >-
+        with f as (select week_index, sum(case when week_index <= 2 then actual else forecast end) flow from weekly_cash
+        where brand_id='fernwood-goods' and is_cash=1 group by week_index), c as (select week_index,
+        (select opening_cash from brands where brand_id='fernwood-goods') + sum(flow) over (order by week_index) closing
+        from f), g as (select max(0, (select cash_buffer from brands where brand_id='fernwood-goods') - min(closing)) gap
+        from c where week_index >= 3) select case when gap = 0 then 0 else (cast(gap / 25000 as int) +
+        (gap > cast(gap / 25000 as int) * 25000)) * 25000 end from g
+      v3: {calls: [[cash_path, {brand_id: fernwood-goods, basis: rollforward}]], pick: draw_to_hold_buffer}
+    interest_one_week:
+      sql: >-
+        with f as (select week_index, sum(case when week_index <= 2 then actual else forecast end) flow from weekly_cash
+        where brand_id='fernwood-goods' and is_cash=1 group by week_index), c as (select week_index,
+        (select opening_cash from brands where brand_id='fernwood-goods') + sum(flow) over (order by week_index) closing
+        from f), g as (select max(0, (select cash_buffer from brands where brand_id='fernwood-goods') - min(closing)) gap
+        from c where week_index >= 3), d as (select case when gap = 0 then 0 else (cast(gap / 25000 as int) +
+        (gap > cast(gap / 25000 as int) * 25000)) * 25000 end draw from g)
+        select round(draw * (select loc_apr from brands where brand_id='fernwood-goods') / 52, 2) from d
+      v3: {calls: [[credit_math, {brand_id: fernwood-goods, op: interest, amount: "{draw}", weeks: 1}]], pick: interest}
+    top_refund_sku: Q07
+    payout_variance: Q06
+    largest_bill_this_week: Q09

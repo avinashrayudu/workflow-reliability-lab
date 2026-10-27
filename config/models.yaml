@@ -1,0 +1,12 @@
+# Live-run settings. Built by Avinash Rayudu.
+default_model: claude-sonnet-5-5
+api_version: "2023-06-01"
+max_tokens: 2048
+temperature: 1.0        # the default; consistency is measured at the setting people actually use
+
+# Base prices in USD per million tokens, from the provider's public pricing page (checked 2026-10-27).
+# Check them again before you trust a cost figure. Haiku 5.5 is priced by prompt length.
+prices_per_mtok:
+  claude-opus-5-5:   {input: 4.00, output: 20.00}
+  claude-sonnet-5-5: {input: 2.00, output: 10.00}
+  claude-haiku-5-5:  {input: 0.10, output: 0.50, over_100k: {input: 0.50, output: 2.50}}
