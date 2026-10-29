@@ -6,24 +6,24 @@ the harness that measures that, so a design choice is made on evidence instead o
 **What it is.** One finance workflow, Fernwood Goods' Monday Cash Brief, built three ways: one big prompt, SQL tools,
 and skills with validators. A harness runs each version N times on the same 33 graded questions plus the brief, and
 reports accuracy, consistency, numeric error, abstention and cost.
-**Best result so far (harness-validated, not live).** The scorer caught all 121 mistakes planted across 12 types and
-passed all 384 clean answers, and every question is answerable through every variant. **No model has been scored
-yet: the live run is pending an API key.**
+**Best result (offline harness).** The scorer caught all 121 mistakes planted across 12 types and passed all 384
+clean answers, and every question is answerable through every variant.
 **See it.** [Reliability report](https://avinashrayudu.github.io/workflow-reliability-lab/reports/reliability.html) ·
 [case study](https://www.avinashrayudu.com/work/workflow-reliability-lab/) ·
-[live-run runbook](docs/live_run.md) · [finance concepts](docs/finance_concepts.md)
+[model-run runbook](docs/live_run.md) · [finance concepts](docs/finance_concepts.md)
 
 Built by Avinash Rayudu. Every brand and number here is synthetic.
 
-## Status: live run pending
+## Where the numbers come from
 
-There are no model scores yet. Everything committed in `evals/results/` comes from the offline mock, which is
-deterministic and is not a language model. The live run needs an Anthropic API key, which this project does not have
-yet. Everything else is ready, and [docs/live_run.md](docs/live_run.md) says what will be published and how.
+Everything committed in `evals/results/` comes from the offline mock. It is deterministic and is not a language
+model: it proves the questions are answerable, the answer key is right and the scorer catches mistakes.
+
+## Running it against a model
 
 ```
 pip install -r requirements.txt
-make live-check                                   # READY or PENDING; no model calls, never prints the key
+make live-check                                   # checks the setup; no model calls, never prints the key
 make dry-run N=5                                  # token and dollar estimate, no calls
 ANTHROPIC_API_KEY=... make live N=5 MODEL=claude-sonnet-5-5 MAX_USD=40
 ```
@@ -31,9 +31,9 @@ ANTHROPIC_API_KEY=... make live N=5 MODEL=claude-sonnet-5-5 MAX_USD=40
 The dry run puts a 5-run pass of all three variants at about **$20 on Sonnet 5.5**, using the prices in
 `config/models.yaml` (checked 2026-10-27). Treat that as a floor: a real model may take more turns than the reference
 solutions. `make live` runs the preflight first, stops before the next call once spending reaches `MAX_USD` (and
-marks the result incomplete), refuses to overwrite a live result already on record, and stamps the summary with the
-git commit and hashes of the data, questions and answer key. When the live run is in, this section, the report and
-the case study will show its scores as they come, including any variant that loses.
+marks the result incomplete), refuses to overwrite a model result already on record, and stamps the summary with the
+git commit and hashes of the data, questions and answer key. [docs/live_run.md](docs/live_run.md) says what gets
+published and in which commits.
 
 ## What the offline run does prove
 
@@ -105,11 +105,11 @@ agent/models.py    live adapter (standard-library HTTP) and token/cost accountin
 agent/mock.py      the offline oracle and faulty mocks, and what they are for
 evals/             harness, preflight, scorer, scorer check, reference solutions, results
 reports/           reliability.html: scorecard, question-by-question grid, failure taxonomy by brand
-docs/design_notes.md   what each variant is expected to get wrong, written before any live run
-docs/live_run.md   the live run: what is ready, how to run it, what gets published
+docs/design_notes.md   what each variant is expected to get wrong, written before scoring any model
+docs/live_run.md   running against a model: how to run it, what gets published
 tests/             19 tests: answer-key agreement, scorer catches, read-only SQL, validator logic,
                    the agent loop with a scripted model, the live request shape (no network),
-                   and the live-run guards (spend cap, no overwrite, provenance, preflight)
+                   and the model-run guards (spend cap, no overwrite, provenance, preflight)
 ```
 
 ## Why these numbers
@@ -130,7 +130,7 @@ Every threshold, in plain language, with where it comes from.
 - **I wrote the questions and the gaps,** so they test the failure modes I thought of.
 - **One snapshot, one brief, 10 synthetic brands.**
 - **Temperature 1.0 by default.** Consistency is measured at the setting people actually use. Change it in `config/models.yaml`.
-- **Mock token counts are estimates.** Live runs record the API's own usage.
+- **Mock token counts are estimates.** Model runs record the API's own usage.
 
 ## Where this fits at Highbeam
 
@@ -156,8 +156,8 @@ covers AP and AR, cash vs accrual and the three-way match across all three proje
 ## How I built this
 
 I built this with Claude Code, Anthropic's coding agent. I chose what to test and set the rules: compute every
-expected answer instead of typing it, plant gaps the workflow must refuse, write the predictions down before any live
-run, label mock results as mock everywhere, and never publish a model score that a committed live run did not
+expected answer instead of typing it, plant gaps the workflow must refuse, write the predictions down before scoring any
+model, label mock results as mock everywhere, and never publish a model score that a committed run did not
 produce. Claude Code wrote most of the code, tests and first drafts of the docs under that direction and ran the
 offline harness. I read the results and decided what changed. [CHANGELOG.md](CHANGELOG.md) shows the order things
 happened in.
