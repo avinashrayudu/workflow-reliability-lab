@@ -1,6 +1,6 @@
 # Changelog
 
-Each release is a git tag. Version 1.0.0 is reserved for the first live run. Built by Avinash Rayudu.
+Each version lists the commits it covers. Version 1.0.0 is reserved for the first live run. Built by Avinash Rayudu.
 
 ## How commits are structured
 
@@ -12,7 +12,7 @@ From v0.2.0 on, every commit message starts with its type:
 | `fix:` | a bug fix; the message names what was wrong |
 | `results:` | output of a run, committed as it came out; nothing else in the commit. A live run is always its own `results:` commit. |
 | `docs:` | README and docs only; no number changes without a matching `results:` commit |
-| `chore:` | tooling, tags, housekeeping |
+| `chore:` | tooling and housekeeping |
 
 ## v0.2.0 (2026-10-28): ready for the live run
 
