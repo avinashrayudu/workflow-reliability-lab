@@ -9,12 +9,22 @@ error, abstention behaviour, cost and latency.
 
 Results go to evals/results/<mode>/: runs.jsonl (every run), summary.json and summary.md.
 
+Live runs are guarded so they can be published as they come:
+  - a spend cap (--max-usd, default 40): the run stops before the next call once the priced cost
+    of what has run reaches the cap, and the summary is marked incomplete;
+  - no overwrite: a live result that already exists is never replaced unless --overwrite is given,
+    so the first live run stays on record as it came out;
+  - provenance: the summary records the git commit, whether the tree was clean, and hashes of the
+    data, the questions and the answer key the run was scored against.
+
 Built by Avinash Rayudu.
 """
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
+import subprocess
 import statistics as st
 from collections import Counter, defaultdict
 from datetime import datetime, timezone
@@ -45,14 +55,37 @@ def make_model(mode, model_name=None):
     return MockModel("faulty" if mode == "faulty" else "oracle")
 
 
-def run(mode, variants, n, qids, model_name=None, progress=True):
-    model = make_model(mode, model_name)
+class BudgetReached(Exception):
+    pass
+
+
+def spent(records, model_name):
+    c = [price(model_name, r["usage"]["input_tokens"], r["usage"]["output_tokens"]) for r in records]
+    return sum(x for x in c if x is not None)
+
+
+def run(mode, variants, n, qids, model_name=None, progress=True, max_usd=None, model=None, stop=None):
+    """stop, if given, is a dict that gets {"budget_reached": True, "spent_usd": ...} when the cap stops the run."""
+    model = model or make_model(mode, model_name)
     records = []
+    try:
+        _run_all(model, mode, variants, n, qids, model_name, progress, max_usd, records)
+    except BudgetReached:
+        if stop is not None:
+            stop.update(budget_reached=True, spent_usd=round(spent(records, model_name), 4))
+        if progress:
+            print(f"Spend cap of ${max_usd} reached after {len(records)} runs; stopping and writing a partial result.")
+    return records
+
+
+def _run_all(model, mode, variants, n, qids, model_name, progress, max_usd, records):
     for vk in variants:
         v = load_variant(vk)
         for qid in qids:
             spec = v.build(question_text(qid))
             for i in range(n):
+                if max_usd is not None and spent(records, model_name) >= max_usd:
+                    raise BudgetReached()
                 r = run_agent(model, spec, {"qid": qid, "variant": v.NAME, "run": i})
                 s = score(qid, r["parsed"])
                 rec = dict(variant=vk, qid=qid, run=i, brand=QBRAND[qid], qtype=QTYPE.get(qid, "brief"),
@@ -63,7 +96,6 @@ def run(mode, variants, n, qids, model_name=None, progress=True):
                 records.append(rec)
                 if progress and mode == "live":
                     print(f"  {vk} {qid} run {i}: {s['outcome']}", flush=True)
-    return records
 
 
 def summarize(records, model_name):
@@ -123,9 +155,36 @@ def by_brand(records):
     return {b: {v: dict(c) for v, c in vs.items()} for b, vs in t.items()}
 
 
-def write(mode, records, model_name, n, price_model=None):
+def _sha(paths):
+    h = hashlib.sha256()
+    for p in sorted(paths):
+        h.update(p.relative_to(ROOT).as_posix().encode())
+        h.update(p.read_bytes())
+    return h.hexdigest()[:16]
+
+
+def provenance():
+    def git(*a):
+        try:
+            return subprocess.run(["git", *a], cwd=ROOT, capture_output=True, text=True, timeout=10).stdout.strip()
+        except Exception:
+            return ""
+    return {"git_commit": git("rev-parse", "--short", "HEAD") or None,
+            # clean = the code and inputs are committed; run outputs (results, the report) are ignored
+            "tree_clean": git("status", "--porcelain", "--untracked-files=no", "--", ".",
+                              ":(exclude)evals/results", ":(exclude)reports") == "",
+            "data_sha": _sha(list((ROOT / "data" / "csv").glob("*.csv"))),
+            "questions_sha": _sha([ROOT / "truth" / "questions.yaml"]),
+            "answer_key_sha": _sha([ROOT / "truth" / "answers.json"])}
+
+
+def write(mode, records, model_name, n, price_model=None, overwrite=False, complete=True, spent_usd=None,
+          root=None):
     price_model = price_model or model_name
-    d = RES / mode
+    d = (root or RES) / mode
+    if mode == "live" and (d / "summary.json").exists() and not overwrite:
+        raise SystemExit(f"{d} already holds a live run. It is kept as it came out; pass --overwrite to replace it, "
+                         "or move it aside first.")
     d.mkdir(parents=True, exist_ok=True)
     with open(d / "runs.jsonl", "w") as f:
         for r in records:
@@ -133,6 +192,7 @@ def write(mode, records, model_name, n, price_model=None):
     summ = {"mode": mode, "model": model_name, "runs_per_question": n,
             "generated_at": datetime.now(timezone.utc).isoformat(timespec="seconds"),
             "tokens_are_estimates": mode != "live", "priced_as": price_model,
+            "complete": complete, "spent_usd": spent_usd, "provenance": provenance(),
             "variants": summarize(records, price_model),
             "failures_by_brand": by_brand(records)}
     (d / "summary.json").write_text(json.dumps(summ, indent=1))
@@ -148,7 +208,11 @@ BANNER = {"mock": "OFFLINE MOCK (oracle). Not model results: a perfect score sho
 
 
 def render_md(s):
-    L = [f"# {s['mode']} run", "", f"**{BANNER[s['mode']]}**", "",
+    L = [f"# {s['mode']} run", "", f"**{BANNER[s['mode']]}**", ""]
+    if not s.get("complete", True):
+        L += [f"**INCOMPLETE: the spend cap stopped this run at ${s.get('spent_usd')}. Scores cover only the runs "
+              "that finished.**", ""]
+    L += [
          f"Model: {s['model']}. Runs per question: {s['runs_per_question']}. "
          f"Token counts are {'estimates (about 4 characters per token)' if s['tokens_are_estimates'] else 'from the API'}; "
          f"cost is priced as {s['priced_as']} from config/models.yaml"
@@ -207,6 +271,8 @@ def main():
     ap.add_argument("--questions", default="all")
     ap.add_argument("--model", default=None)
     ap.add_argument("--dry-run", action="store_true")
+    ap.add_argument("--max-usd", type=float, default=40.0, help="live mode: stop before spending more than this")
+    ap.add_argument("--overwrite", action="store_true", help="live mode: replace an existing live result")
     a = ap.parse_args()
     variants = a.variants.split(",")
     for v in variants:
@@ -215,9 +281,13 @@ def main():
     model_name = a.model or CONFIG["default_model"]
     if a.dry_run:
         return dry_run(a.n, variants, qids, model_name)
-    recs = run(a.mode, variants, a.n, qids, model_name)
+    if a.mode == "live" and (RES / "live" / "summary.json").exists() and not a.overwrite:
+        raise SystemExit("evals/results/live/ already holds a live run; pass --overwrite to replace it.")
+    stop = {}
+    recs = run(a.mode, variants, a.n, qids, model_name, max_usd=a.max_usd if a.mode == "live" else None, stop=stop)
     label = model_name if a.mode == "live" else {"mock": "mock-oracle", "faulty": "mock-faulty"}[a.mode]
-    write(a.mode, recs, label, a.n, price_model=model_name)
+    write(a.mode, recs, label, a.n, price_model=model_name, overwrite=a.overwrite,
+          complete=not stop.get("budget_reached"), spent_usd=round(spent(recs, model_name), 4) if a.mode == "live" else None)
     print((RES / a.mode / "summary.md").read_text())
 
 

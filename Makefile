@@ -3,7 +3,7 @@ PY ?= python3
 N ?= 5
 MODEL ?= claude-sonnet-5-5
 
-.PHONY: demo truth mock faulty scorer report test dry-run live data
+.PHONY: demo truth mock faulty scorer report test dry-run live-check live data
 
 demo: truth mock faulty scorer report test     ## offline, no API key needed
 
@@ -28,8 +28,12 @@ test:
 dry-run:              ## token and dollar estimate for a live run, no calls
 	$(PY) -m evals.harness --dry-run --n $(N) --model $(MODEL)
 
-live:                 ## real model calls; needs ANTHROPIC_API_KEY
-	$(PY) -m evals.harness --mode live --n $(N) --model $(MODEL)
+live-check:           ## is a live run ready? no model calls; prints READY or PENDING
+	$(PY) -m evals.preflight --n $(N) --model $(MODEL)
+
+MAX_USD ?= 40
+live: live-check      ## real model calls; needs ANTHROPIC_API_KEY; stops at MAX_USD; never overwrites a live run
+	$(PY) -m evals.harness --mode live --n $(N) --model $(MODEL) --max-usd $(MAX_USD)
 	$(PY) -m reports.build_report
 
 data:                 ## re-export the tables from a forecast-health-monitor checkout: make data B=../forecast-health-monitor
