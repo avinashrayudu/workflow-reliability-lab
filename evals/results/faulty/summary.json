@@ -2,9 +2,18 @@
  "mode": "faulty",
  "model": "mock-faulty",
  "runs_per_question": 3,
- "generated_at": "2026-10-27T09:39:58+00:00",
+ "generated_at": "2026-10-29T03:19:54+00:00",
  "tokens_are_estimates": true,
  "priced_as": "claude-sonnet-5-5",
+ "complete": true,
+ "spent_usd": null,
+ "provenance": {
+  "git_commit": "315546b",
+  "tree_clean": true,
+  "data_sha": "bb3876f016bf0c36",
+  "questions_sha": "b867d57c718f40f6",
+  "answer_key_sha": "c294ef562a17b6b2"
+ },
  "variants": {
   "v1": {
    "runs_per_question": 3,
@@ -39,7 +48,7 @@
    "cost_usd": 7.6744,
    "cost_per_question_usd": 0.07524,
    "mean_turns": 1,
-   "median_latency_s": 0.025
+   "median_latency_s": 0.033
   },
   "v2": {
    "runs_per_question": 3,

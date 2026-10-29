@@ -23,7 +23,7 @@ Model: mock-faulty. Runs per question: 3. Token counts are estimates (about 4 ch
 | cost USD | 7.6744 | 0.5621 | 1.5418 |
 | cost per question USD | 0.07524 | 0.00551 | 0.01512 |
 | mean turns | 1 | 2 | 3.31 |
-| median latency s | 0.025 | 0.0 | 0.001 |
+| median latency s | 0.033 | 0.0 | 0.001 |
 
 ## Outcomes
 

@@ -23,7 +23,7 @@ Model: mock-oracle. Runs per question: 3. Token counts are estimates (about 4 ch
 | cost USD | 7.6756 | 0.5634 | 1.4949 |
 | cost per question USD | 0.07525 | 0.00552 | 0.01466 |
 | mean turns | 1 | 2 | 3.24 |
-| median latency s | 0.025 | 0.0 | 0.001 |
+| median latency s | 0.03 | 0.0 | 0.001 |
 
 ## Outcomes
 
