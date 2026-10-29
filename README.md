@@ -1,14 +1,19 @@
 # workflow-reliability-lab
 
-One finance workflow, Fernwood Goods' Monday Cash Brief, built three ways. A harness runs each version N times on the same 33 graded questions, plus the brief itself, and reports accuracy, consistency, numeric error, abstention behavior and cost.
+**What it is.** One finance workflow, Fernwood Goods' Monday Cash Brief, built three ways: one big prompt, SQL tools,
+and skills with validators. A harness runs each version N times on the same 33 graded questions plus the brief, and
+reports accuracy, consistency, numeric error, abstention and cost.
+**Best result so far (harness-validated, not live).** The scorer caught all 121 mistakes planted across 12 types and
+passed all 384 clean answers, and every question is answerable through every variant. No model has been scored yet.
+**See it.** [Reliability report](https://avinashrayudu.github.io/workflow-reliability-lab/reports/reliability.html) ·
+[case study](https://www.avinashrayudu.com/work/workflow-reliability-lab/)
 
 Built by Avinash Rayudu. Every brand and number here is synthetic.
 
-## Status: no live scores yet
+## Status: harness-validated, not live
 
-The environment I built this in had no API key. Everything committed in `evals/results/` comes from the offline mock, and the mock is not a language model.
-
-Model scores exist only after you run it with your own key:
+There are no model scores yet. Everything committed in `evals/results/` comes from the offline mock, which is
+deterministic and is not a language model. The live run is one command and costs about $20:
 
 ```
 pip install -r requirements.txt
@@ -16,13 +21,16 @@ make dry-run N=5                                  # token and dollar estimate, n
 ANTHROPIC_API_KEY=... make live N=5 MODEL=claude-sonnet-5-5
 ```
 
-The dry run puts a 5-run pass of all three variants at about **$20 on Sonnet 5.5**, using the prices in `config/models.yaml` (checked 2026-10-27). Treat that as a floor: a real model may take more turns than the reference solutions.
+The dry run puts a 5-run pass of all three variants at about **$20 on Sonnet 5.5**, using the prices in
+`config/models.yaml` (checked 2026-10-27). Treat that as a floor: a real model may take more turns than the reference
+solutions. When the live run is in, this section, the report and the case study will show its scores as they come,
+including any variant that loses.
 
 ## What the offline run does prove
 
 `make demo` runs all of this end to end in about 16 seconds:
 
-1. **Every question is answerable through every variant, and the answer key is right.** The reference solutions get 33 of 33 questions plus all 8 brief fields through each variant's own interface. For v1, that means rebuilding the tables from the CSV text in the prompt. These solutions are SQL and tool calls in `evals/mock_plans.yaml`. They are a second computation, independent of the pandas answer key in `truth/build_truth.py`, and a test requires the two to agree. The key also reproduces what forecast-health-monitor printed for the same data: a **$194,498** low point in the week of Nov 16, and a **$125,000** draw.
+1. **Every question is answerable through every variant, and the answer key is right.** The reference solutions get 33 of 33 questions plus all 8 brief fields through each variant's own interface. For v1, that means rebuilding the tables from the CSV text in the prompt. These solutions are SQL and tool calls in `evals/mock_plans.yaml`. They are a second computation, independent of the pandas answer key in `truth/build_truth.py`, and a test requires the two to agree. The key also reproduces what forecast-health-monitor printed for the same data: a **$194,498** low point in the week of Nov 16, and a **$125,000** draw. That draw is the week-0 figure (the smallest $25,000 step that holds the buffer before any actuals); the Nov 16 brief in forecast-health-monitor calls for $225,000 because refunds have since deepened the trough and the draw adds a cushion.
 2. **The scorer catches mistakes of every type I injected.** The faulty mock planted 121 mistakes across 12 types:
    - wrong sign, wrong scale, 3% drift, a neighboring number;
    - a week off by one, the wrong SKU or brand, an off-by-one count, a dropped list item;
@@ -92,6 +100,15 @@ docs/design_notes.md   what each variant is expected to get wrong, written befor
 tests/             15 tests: answer-key agreement, scorer catches, read-only SQL, validator logic,
                    the agent loop with a scripted model, the live request shape (no network)
 ```
+
+## Why these numbers
+
+| Setting | Value | Why |
+|---|---|---|
+| Money tolerance | the larger of $1 or 0.05% | Rounding to the dollar is fine; anything bigger is a different number. |
+| Runs per variant | N = 5 | Enough to see whether a variant gives the same answer twice; consistency is scored separately from accuracy. |
+| Temperature | 1.0 | Consistency is measured at the setting people actually use. |
+| Abstentions | 4 required, 2 controls | The controls ask about the same brands on answerable questions, so a variant that refuses everything scores badly. |
 
 ## Limits
 
