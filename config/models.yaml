@@ -1,7 +1,7 @@
 # Live-run settings. Built by Avinash Rayudu.
 default_model: claude-sonnet-5-5
 api_version: "2023-06-01"
-max_tokens: 2048
+max_tokens: 8192        # 2048 cut off a v1 answer mid-arithmetic in the smoke test (evals/results/smoke)
 temperature: 1.0        # the default; consistency is measured at the setting people actually use
 
 # Prices in USD per million tokens, from the provider's pricing page (checked 2026-10-30).
