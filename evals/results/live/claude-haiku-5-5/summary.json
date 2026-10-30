@@ -1,0 +1,161 @@
+{
+ "mode": "live",
+ "model": "claude-haiku-5-5",
+ "runs_per_question": 5,
+ "generated_at": "2026-10-30T18:56:08+00:00",
+ "tokens_are_estimates": false,
+ "priced_as": "claude-haiku-5-5",
+ "complete": true,
+ "spent_usd": 0.6008,
+ "provenance": {
+  "git_commit": "9eca1ca",
+  "tree_clean": true,
+  "data_sha": "bb3876f016bf0c36",
+  "questions_sha": "b867d57c718f40f6",
+  "answer_key_sha": "c294ef562a17b6b2"
+ },
+ "variants": {
+  "v1": {
+   "runs_per_question": 5,
+   "questions": 33,
+   "accuracy": 0.915,
+   "questions_right_every_run": 27,
+   "questions_right_by_majority": 31,
+   "consistency_all_runs_agree": 0.879,
+   "consistency_modal_share": 0.976,
+   "money_answers_scored": 105,
+   "median_numeric_error_pct": 0.0,
+   "mean_numeric_error_pct": 3.056,
+   "abstention_correct": "20/20",
+   "false_abstentions": 0,
+   "outcomes": {
+    "correct": 151,
+    "wrong_number": 3,
+    "wrong_date": 1,
+    "format_error": 10
+   },
+   "brief_fields_correct": "40/40",
+   "brief_dollar_figures": 35,
+   "brief_unsupported_figures": 2,
+   "validator_revisions": 0,
+   "validator_forced_abstentions": 0,
+   "error_types": {
+    "number off by 1% or more": 2,
+    "wrong date": 1,
+    "number off by under 1%": 1,
+    "no usable answer": 10,
+    "brief: dollar figure not in the data": 1
+   },
+   "input_tokens": 680,
+   "output_tokens": 268160,
+   "cache_write_tokens": 95374,
+   "cache_read_tokens": 15624291,
+   "cost_usd": 0.3023,
+   "cost_per_question_usd": 0.00178,
+   "correct_answers": 155,
+   "cost_per_correct_answer_usd": 0.00195,
+   "mean_turns": 1,
+   "median_latency_s": 3.045
+  },
+  "v2": {
+   "runs_per_question": 5,
+   "questions": 33,
+   "accuracy": 0.982,
+   "questions_right_every_run": 31,
+   "questions_right_by_majority": 33,
+   "consistency_all_runs_agree": 0.909,
+   "consistency_modal_share": 0.976,
+   "money_answers_scored": 104,
+   "median_numeric_error_pct": 0.0,
+   "mean_numeric_error_pct": 0.543,
+   "abstention_correct": "20/20",
+   "false_abstentions": 1,
+   "outcomes": {
+    "correct": 162,
+    "wrong_number": 2,
+    "false_abstention": 1
+   },
+   "brief_fields_correct": "40/40",
+   "brief_dollar_figures": 51,
+   "brief_unsupported_figures": 3,
+   "validator_revisions": 0,
+   "validator_forced_abstentions": 0,
+   "error_types": {
+    "number off by 1% or more": 2,
+    "refused an answerable question": 1,
+    "brief: dollar figure not in the data": 2
+   },
+   "input_tokens": 1202,
+   "output_tokens": 165104,
+   "cache_write_tokens": 319970,
+   "cache_read_tokens": 987740,
+   "cost_usd": 0.1325,
+   "cost_per_question_usd": 0.00078,
+   "correct_answers": 165,
+   "cost_per_correct_answer_usd": 0.0008,
+   "mean_turns": 2.54,
+   "median_latency_s": 4.803
+  },
+  "v3": {
+   "runs_per_question": 5,
+   "questions": 33,
+   "accuracy": 1.0,
+   "questions_right_every_run": 33,
+   "questions_right_by_majority": 33,
+   "consistency_all_runs_agree": 1.0,
+   "consistency_modal_share": 1.0,
+   "money_answers_scored": 105,
+   "median_numeric_error_pct": 0.0,
+   "mean_numeric_error_pct": 0.0,
+   "abstention_correct": "20/20",
+   "false_abstentions": 0,
+   "outcomes": {
+    "correct": 165
+   },
+   "brief_fields_correct": "40/40",
+   "brief_dollar_figures": 51,
+   "brief_unsupported_figures": 0,
+   "validator_revisions": 2,
+   "validator_forced_abstentions": 0,
+   "error_types": {},
+   "input_tokens": 1980,
+   "output_tokens": 154435,
+   "cache_write_tokens": 461047,
+   "cache_read_tokens": 3089531,
+   "cost_usd": 0.1659,
+   "cost_per_question_usd": 0.00098,
+   "correct_answers": 170,
+   "cost_per_correct_answer_usd": 0.00098,
+   "mean_turns": 4.81,
+   "median_latency_s": 5.826
+  }
+ },
+ "failures_by_brand": {
+  "fernwood-goods": {
+   "v1": {
+    "wrong_number": 2,
+    "wrong_date": 1,
+    "unsupported_number": 1
+   },
+   "v2": {
+    "wrong_number": 2,
+    "unsupported_number": 2
+   }
+  },
+  "portfolio": {
+   "v1": {
+    "format_error": 10
+   }
+  },
+  "saltmarsh-apparel": {
+   "v1": {
+    "wrong_number": 1
+   }
+  },
+  "tidewater-swim": {
+   "v2": {
+    "false_abstention": 1
+   }
+  }
+ }
+}
