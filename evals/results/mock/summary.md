@@ -18,18 +18,27 @@ Model: mock-oracle. Runs per question: 3. Token counts are estimates (about 4 ch
 | brief unsupported $ figures | 0 | 0 | 0 |
 | validator revisions | 0 | 0 | 0 |
 | validator forced abstentions | 0 | 0 | 0 |
-| input tokens | 3816792 | 212250 | 691917 |
+| input tokens (not cached) | 3816792 | 212250 | 691917 |
+| cache read tokens | 0 | 0 | 0 |
+| cache write tokens | 0 | 0 | 0 |
 | output tokens | 4197 | 13887 | 11109 |
 | cost USD | 7.6756 | 0.5634 | 1.4949 |
 | cost per question USD | 0.07525 | 0.00552 | 0.01466 |
+| cost per correct answer USD | 0.07525 | 0.00552 | 0.01466 |
 | mean turns | 1 | 2 | 3.24 |
-| median latency s | 0.03 | 0.0 | 0.001 |
+| median latency s | 0.025 | 0.0 | 0.001 |
 
 ## Outcomes
 
 - v1: correct 99
 - v2: correct 99
 - v3: correct 99
+
+## Why answers were wrong
+
+- v1: none
+- v2: none
+- v3: none
 
 ## Failures by brand
 

@@ -18,18 +18,27 @@ Model: mock-faulty. Runs per question: 3. Token counts are estimates (about 4 ch
 | brief unsupported $ figures | 0 | 0 | 0 |
 | validator revisions | 0 | 0 | 8 |
 | validator forced abstentions | 0 | 0 | 2 |
-| input tokens | 3816792 | 212250 | 713430 |
+| input tokens (not cached) | 3816792 | 212250 | 713430 |
+| cache read tokens | 0 | 0 | 0 |
+| cache write tokens | 0 | 0 | 0 |
 | output tokens | 4086 | 13761 | 11493 |
 | cost USD | 7.6744 | 0.5621 | 1.5418 |
 | cost per question USD | 0.07524 | 0.00551 | 0.01512 |
+| cost per correct answer USD | 0.09714 | 0.0077 | 0.01858 |
 | mean turns | 1 | 2 | 3.31 |
-| median latency s | 0.033 | 0.0 | 0.001 |
+| median latency s | 0.024 | 0.0 | 0.001 |
 
 ## Outcomes
 
 - v1: correct 76, false_abstention 3, format_error 3, missed_abstention 2, wrong_date 1, wrong_entity 3, wrong_number 10, wrong_set 1
 - v2: correct 70, false_abstention 4, format_error 3, missed_abstention 4, wrong_date 1, wrong_entity 3, wrong_number 13, wrong_set 1
 - v3: correct 80, false_abstention 4, wrong_count 1, wrong_date 3, wrong_entity 4, wrong_number 7
+
+## Why answers were wrong
+
+- v1: number off by 1% or more 7, number off by under 1% 3, wrong entity 3, refused an answerable question 3, no usable answer 3, answered when the data was missing 2, wrong date 1, wrong set 1
+- v2: number off by 1% or more 13, refused an answerable question 4, answered when the data was missing 4, wrong entity 3, no usable answer 3, wrong date 1, wrong set 1
+- v3: number off by 1% or more 7, wrong entity 4, wrong date 3, validator forced a refusal 2, refused an answerable question 2, wrong count 1
 
 ## Failures by brand
 

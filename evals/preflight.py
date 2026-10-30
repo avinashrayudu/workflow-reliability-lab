@@ -18,7 +18,7 @@ import os
 import sys
 
 from agent.models import CONFIG, price
-from evals.harness import ALL_IDS, RES, ROOT, dry_run, provenance
+from evals.harness import ALL_IDS, ROOT, dry_run, live_dir, provenance
 
 
 def checks(model: str, env=os.environ) -> list[tuple[str, bool, str]]:
@@ -33,9 +33,9 @@ def checks(model: str, env=os.environ) -> list[tuple[str, bool, str]]:
     priced = price(model, 0, 0) is not None
     out.append((f"{model} has a price in config/models.yaml", priced,
                 "the spend cap can price every call" if priced else "add its prices first"))
-    free = not (RES / "live" / "summary.json").exists()
+    free = not (live_dir(model) / "summary.json").exists()
     out.append(("no live result would be overwritten", free,
-                "evals/results/live/ is empty" if free else "a live run is already on record"))
+                f"evals/results/live/{model}/ is empty" if free else f"a live run of {model} is already on record"))
     key = bool(env.get("ANTHROPIC_API_KEY"))
     out.append(("ANTHROPIC_API_KEY is set", key, "set (not shown)" if key else "not set"))
     return out

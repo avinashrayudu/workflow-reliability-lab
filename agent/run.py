@@ -18,6 +18,7 @@ from variants.common import parse_final
 VARIANTS = {"v1": "variants.v1_single_prompt.variant", "v2": "variants.v2_sql_tools.variant",
             "v3": "variants.v3_skills_validators.variant"}
 TOOL_RESULT_CAP = 20000
+USAGE_KEYS = ("input_tokens", "output_tokens", "cache_creation_input_tokens", "cache_read_input_tokens")
 
 
 def load_variant(key):
@@ -33,8 +34,12 @@ def run_agent(model, spec, context):
     budget = spec["max_turns"] + (2 if spec["validator"] else 0)
     for turn in range(budget):
         resp = model.create(spec["system"], messages, spec["tools"], context)
-        for k in usage:
-            usage[k] += int(resp.get("usage", {}).get(k, 0))
+        u = resp.get("usage", {})
+        for k in USAGE_KEYS:
+            if k in usage or u.get(k):
+                usage[k] = usage.get(k, 0) + int(u.get(k) or 0)
+        if resp.get("_cost_usd") is not None:
+            usage["cost_usd"] = round(usage.get("cost_usd", 0) + resp["_cost_usd"], 8)
         fault = resp.get("_mock_fault", fault)
         messages.append({"role": "assistant", "content": resp["content"]})
         uses = [b for b in resp["content"] if b.get("type") == "tool_use"]

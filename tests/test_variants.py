@@ -94,7 +94,31 @@ def test_live_adapter_builds_a_messages_request(monkeypatch):
     assert seen["url"] == "https://api.anthropic.com/v1/messages"
     h = {k.lower(): v for k, v in seen["headers"].items()}
     assert h["x-api-key"] == "test-key" and h["anthropic-version"] == "2023-06-01"
-    assert seen["body"]["system"] == "sys" and seen["body"]["tools"][0]["name"] == "t"
+    body = seen["body"]
+    assert body["system"] == [{"type": "text", "text": "sys", "cache_control": {"type": "ephemeral"}}]
+    assert body["tools"][0]["name"] == "t" and body["tools"][-1]["cache_control"] == {"type": "ephemeral"}
+    # the end of the conversation is marked for caching, so the next turn reads it from cache
+    assert body["messages"][-1]["content"][-1] == {"type": "text", "text": "hi", "cache_control": {"type": "ephemeral"}}
+
+
+def test_caching_marks_the_copy_not_the_conversation():
+    from agent.models import cached_messages
+    convo = [{"role": "user", "content": [{"type": "tool_result", "tool_use_id": "t1", "content": "x"}]}]
+    sent = cached_messages(convo)
+    assert "cache_control" in sent[-1]["content"][-1] and "cache_control" not in convo[-1]["content"][-1]
+
+
+def test_cached_tokens_are_priced_at_cache_rates():
+    from agent.models import price, price_usage
+    # Sonnet 5.5: $2 input, $10 output, $2.50 cache write, $0.10 cache read per million tokens
+    assert abs(price("claude-sonnet-5-5", 1_000_000, 0, 0, 0) - 2.0) < 1e-9
+    assert abs(price("claude-sonnet-5-5", 0, 0, 1_000_000, 0) - 2.5) < 1e-9
+    assert abs(price("claude-sonnet-5-5", 0, 0, 0, 1_000_000) - 0.10) < 1e-9
+    # Haiku 5.5's tier counts cached tokens toward the 100K prompt length
+    lo = price_usage("claude-haiku-5-5", {"input_tokens": 1000, "cache_read_input_tokens": 50_000})
+    hi = price_usage("claude-haiku-5-5", {"input_tokens": 1000, "cache_read_input_tokens": 150_000})
+    assert abs(lo - (1000 * 0.10 + 50_000 * 0.01) / 1e6) < 1e-12
+    assert abs(hi - (1000 * 0.50 + 150_000 * 0.05) / 1e6) < 1e-12
 
 
 def test_live_mode_without_a_key_stops_cleanly(monkeypatch):

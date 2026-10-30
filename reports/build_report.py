@@ -54,8 +54,10 @@ ROWS = [("Accuracy, all runs", "accuracy", "pct"), ("Questions right every run",
                                                                 "brief_unsupported_figures", ""),
         ("Validator send-backs", "validator_revisions", ""), ("Validator forced abstentions",
                                                              "validator_forced_abstentions", ""),
-        ("Input tokens", "input_tokens", "int"), ("Output tokens", "output_tokens", "int"),
+        ("Input tokens (not cached)", "input_tokens", "int"), ("Cache read tokens", "cache_read_tokens", "int"),
+        ("Output tokens", "output_tokens", "int"),
         ("Cost (USD)", "cost_usd", "usd"), ("Cost per question (USD)", "cost_per_question_usd", "usd4"),
+        ("Cost per correct answer (USD)", "cost_per_correct_answer_usd", "usd4"),
         ("Mean turns", "mean_turns", ""), ("Median latency (s)", "median_latency_s", "")]
 
 
@@ -66,23 +68,34 @@ def fmt(v, k):
             "usd": lambda: f"${v:,.2f}", "usd4": lambda: f"${v:,.4f}"}.get(k, lambda: str(v))()
 
 
-def section(mode):
-    d = RES / mode
+def section(mode, sub=None):
+    d = RES / (sub or mode)
     if not (d / "summary.json").exists():
         return ""
     s = json.loads((d / "summary.json").read_text())
     runs = [json.loads(l) for l in (d / "runs.jsonl").read_text().splitlines()]
     from evals.harness import BANNER
     V = list(s["variants"])
-    out = [f"<h2>{html.escape(mode)} run</h2><div class=banner>{html.escape(BANNER[mode])}</div>",
+    title = f"Live run: {s['model']}" if mode == "live" else f"{mode} run"
+    banner = BANNER[mode] + ("" if s.get("complete", True) else
+                             f" INCOMPLETE: the spend cap stopped it at ${s.get('spent_usd')}.")
+    out = [f"<h2>{html.escape(title)}</h2><div class=banner>{html.escape(banner)}</div>",
            f"<p class=small>Model: {html.escape(s['model'])} · runs per question: {s['runs_per_question']} · "
            f"{'token counts estimated at ~4 characters per token' if s['tokens_are_estimates'] else 'tokens from the API'}"
            f" · cost priced as {html.escape(s.get('priced_as') or s['model'])} · generated {s['generated_at']}</p>",
            "<div class=card><table><tr><th>Metric</th>" + "".join(f"<th>{v}</th>" for v in V) + "</tr>"]
     for label, k, f in ROWS:
-        out.append(f"<tr><td>{label}</td>" + "".join(f"<td class=n>{fmt(s['variants'][v][k], f)}</td>" for v in V)
+        out.append(f"<tr><td>{label}</td>" + "".join(f"<td class=n>{fmt(s['variants'][v].get(k), f)}</td>" for v in V)
                    + "</tr>")
     out.append("</table></div>")
+    ets = {v: s["variants"][v].get("error_types") or {} for v in V}
+    kinds = sorted({k for e in ets.values() for k in e}, key=lambda k: -sum(e.get(k, 0) for e in ets.values()))
+    if kinds:
+        out.append("<h3>Why answers were wrong</h3><div class=card><table><tr><th>Error type</th>"
+                   + "".join(f"<th>{v}</th>" for v in V) + "</tr>"
+                   + "".join(f"<tr><td>{html.escape(k)}</td>" + "".join(f"<td class=n>{ets[v].get(k, '')}</td>"
+                                                                        for v in V) + "</tr>" for k in kinds)
+                   + "</table></div>")
     grid = defaultdict(lambda: defaultdict(list))
     for r in runs:
         grid[r["qid"]][r["variant"]].append(r)
@@ -135,7 +148,8 @@ def scorer_section():
 
 
 def build():
-    live = section("live")
+    live = "".join(section("live", f"live/{d.name}") for d in sorted((RES / "live").glob("*"))
+                   if (d / "summary.json").exists()) if (RES / "live").exists() else ""
     body = (f"<h1>Workflow reliability lab</h1><p class=sub>The Fernwood Cash Brief workflow built three ways and "
             f"graded on 33 questions with exact answers, plus the brief itself.</p>"
             + ("" if live else "<div class=banner>No live run yet. Live scores exist only after a run with an API "

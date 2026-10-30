@@ -32,8 +32,9 @@ live-check:           ## is a live run ready? no model calls; prints READY or PE
 	$(PY) -m evals.preflight --n $(N) --model $(MODEL)
 
 MAX_USD ?= 40
+WORKERS ?= 4
 live: live-check      ## real model calls; needs ANTHROPIC_API_KEY; stops at MAX_USD; never overwrites a live run
-	$(PY) -m evals.harness --mode live --n $(N) --model $(MODEL) --max-usd $(MAX_USD)
+	$(PY) -m evals.harness --mode live --n $(N) --model $(MODEL) --max-usd $(MAX_USD) --workers $(WORKERS) $(RESUME)
 	$(PY) -m reports.build_report
 
 data:                 ## re-export the tables from a forecast-health-monitor checkout: make data B=../forecast-health-monitor

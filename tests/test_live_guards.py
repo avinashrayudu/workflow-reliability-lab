@@ -47,3 +47,40 @@ def test_preflight_is_pending_without_a_key_and_never_prints_it():
     assert res["answer key matches the data and questions"] is True
     with_key = preflight.checks("claude-sonnet-5-5", env={"ANTHROPIC_API_KEY": "sk-secret"})
     assert all("sk-secret" not in note for _, _, note in with_key)
+
+
+def test_parallel_runs_respect_the_cap_and_keep_order(tmp_path):
+    stop = {}
+    recs = harness.run("live", ["v2"], 2, ["Q01", "Q02", "Q03"], "claude-sonnet-5-5", progress=False,
+                       max_usd=5.0, model=Expensive(), stop=stop, workers=3)
+    # with 3 calls in flight the cap can be passed by at most the calls already running
+    assert stop["budget_reached"] and 3 <= len(recs) <= 5
+    keys = [(r["qid"], r["run"]) for r in recs]
+    assert keys == sorted(keys)
+
+
+def test_finished_runs_are_saved_as_they_land_and_a_resume_skips_them(tmp_path):
+    saved = []
+    first = harness.run("live", ["v2"], 1, ["Q01", "Q02"], "claude-sonnet-5-5", progress=False, model=Expensive(),
+                        sink=saved.append)
+    assert len(saved) == 2
+    calls = []
+
+    class Counting(Expensive):
+        def create(self, *a, **k):
+            calls.append(1)
+            return super().create(*a, **k)
+
+    again = harness.run("live", ["v2"], 1, ["Q01", "Q02", "Q03"], "claude-sonnet-5-5", progress=False,
+                        model=Counting(), prior=first)
+    assert len(again) == 3 and len(calls) == 1
+
+
+def test_wrong_answers_get_a_plain_language_error_type():
+    et = harness.error_type
+    assert et({"qid": "Q01", "outcome": "correct"}) is None
+    assert et({"qid": "Q01", "outcome": "wrong_number", "numeric_error": 0.004}) == "number off by under 1%"
+    assert et({"qid": "Q01", "outcome": "wrong_number", "numeric_error": 0.2}) == "number off by 1% or more"
+    assert et({"qid": "Q30", "outcome": "missed_abstention"}) == "answered when the data was missing"
+    assert et({"qid": "Q01", "outcome": "false_abstention", "forced_abstain": True}) == "validator forced a refusal"
+    assert et({"qid": "B01", "outcome": "wrong_brief", "unsupported": 2}) == "brief: dollar figure not in the data"
